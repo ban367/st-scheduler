@@ -1,4 +1,9 @@
-<!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
+<script>
+  import Greet from "$lib/Greet.svelte";
+</script>
+
+<h1>Welcome to SvelteKit</h1>
+<Greet />
 
 <div class="container h-full mx-auto flex justify-center items-center">
   <div class="space-y-5">
