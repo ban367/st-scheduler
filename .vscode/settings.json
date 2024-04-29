@@ -114,5 +114,8 @@
     "transition",
     "width",
     "zIndex"
-  ]
+  ],
+  "files.exclude": {
+    "src-tauri": true,
+  }
 }
