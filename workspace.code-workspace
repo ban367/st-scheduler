@@ -1,13 +1,13 @@
 {
-	"folders": [
-		{
-			"name": "app",
-			"path": "."
-		},
-		{
-			"name": "tauri",
-			"path": "src-tauri"
-		},
-	],
-	"settings": {}
+  "folders": [
+    {
+      "name": "app",
+      "path": ".",
+    },
+    {
+      "name": "tauri",
+      "path": "src-tauri",
+    },
+  ],
+  "settings": {},
 }

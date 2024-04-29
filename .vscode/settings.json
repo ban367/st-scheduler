@@ -116,6 +116,6 @@
     "zIndex"
   ],
   "files.exclude": {
-    "src-tauri": true,
+    "src-tauri": true
   }
 }
