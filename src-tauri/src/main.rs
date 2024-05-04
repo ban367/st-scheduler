@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, process_calendar_data])
+        .invoke_handler(tauri::generate_handler![process_calendar_data])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -23,11 +23,6 @@ struct CalendarData {
     year: u32,
     month: u32,
     days: HashMap<String, CalendarDay>,
-}
-
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}!", name)
 }
 
 #[tauri::command]
