@@ -2,12 +2,13 @@ import { writable } from "svelte/store";
 import type { AnalyzeData } from "$lib/types/calendar";
 
 const currentDate = new Date();
-const currentYear = currentDate.getFullYear();
-const currentMonth = currentDate.getMonth() + 1;
+
+export const currentYear = writable(currentDate.getFullYear());
+export const currentMonth = writable(currentDate.getMonth() + 1);
 
 export const calendarData = writable<AnalyzeData>({
-  year: currentYear,
-  month: currentMonth,
+  year: currentDate.getFullYear(),
+  month: currentDate.getMonth() + 1,
   days: {},
   userAggregate: {},
 });

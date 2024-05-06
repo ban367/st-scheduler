@@ -5,14 +5,15 @@
   import { getModalStore } from "@skeletonlabs/skeleton";
   import type { ModalSettings, ModalComponent } from "@skeletonlabs/skeleton";
 
+  import { currentYear, currentMonth } from "$lib/stores/calendar";
   import { updateUserIds } from "$lib/stores/calendar";
   import ModalUserSelect from "$lib/components/modal/UserSelect.svelte";
 
   const initialDate: Date = new Date();
   const unknownName = "Unknown";
-  let today: Date = new Date();
-  let currentMonth: number = today.getMonth();
-  let currentYear: number = today.getFullYear();
+  // let today: Date = new Date();
+  // let currentMonth: number = today.getMonth();
+  // let $currentYear: number = today.getFullYear();
 
   let days: { day: number | string; userIds: number[]; stUserIds: number[]; isToday: boolean; isWeekend: boolean }[] =
     [];
@@ -56,21 +57,21 @@
   }
 
   function navigateMonth(step: number): void {
-    currentMonth += step;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    } else if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
+    $currentMonth += step;
+    if ($currentMonth > 11) {
+      $currentMonth = 0;
+      $currentYear++;
+    } else if ($currentMonth < 0) {
+      $currentMonth = 11;
+      $currentYear--;
     }
-    generateCalendar(currentMonth, currentYear);
+    generateCalendar($currentMonth, $currentYear);
   }
 
   function resetToToday(): void {
-    currentMonth = initialDate.getMonth();
-    currentYear = initialDate.getFullYear();
-    generateCalendar(currentMonth, currentYear);
+    $currentMonth = initialDate.getMonth();
+    $currentYear = initialDate.getFullYear();
+    generateCalendar($currentMonth, $currentYear);
   }
 
   function getUserName(userId: number): string {
@@ -102,10 +103,10 @@
     modalStore.trigger(modal);
   }
 
-  $: $calendarData, generateCalendar(currentMonth, currentYear);
+  $: $calendarData, generateCalendar($currentMonth, $currentYear);
 
   onMount(() => {
-    generateCalendar(currentMonth, currentYear);
+    generateCalendar($currentMonth, $currentYear);
   });
 </script>
 
@@ -113,7 +114,7 @@
   <div class="mb-2 flex justify-between">
     <button class="rounded bg-blue-500 px-4 py-2 text-white" on:click={() => navigateMonth(-1)}>&lt; 前月</button>
     <button class="cursor-pointer rounded px-4 py-2 text-center" on:click={resetToToday}>
-      {currentYear}年 {currentMonth + 1}月
+      {$currentYear}年 {$currentMonth + 1}月
     </button>
     <button class="rounded bg-blue-500 px-4 py-2 text-white" on:click={() => navigateMonth(1)}>次月 &gt;</button>
   </div>
