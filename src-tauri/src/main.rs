@@ -10,6 +10,13 @@ fn main() {
 }
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
+struct UserAggregate {
+    attendance: u32,
+    #[serde(rename = "stRewards", default)]
+    st_rewards: u32,
+}
+
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
 struct CalendarDay {
     #[serde(rename = "userIds")]
     user_ids: Vec<u32>,
@@ -22,10 +29,26 @@ struct CalendarData {
     year: u32,
     month: u32,
     days: HashMap<String, CalendarDay>,
-    #[serde(rename = "attendanceCount", default)]
-    attendance_count: HashMap<u32, u32>,
-    #[serde(rename = "stCount", default)]
-    st_count: HashMap<u32, u32>,
+    #[serde(rename = "userAggregate", default)]
+    user_aggregate: HashMap<u32, UserAggregate>,
+}
+
+fn aggregate_user_data(
+    attendance_count: &HashMap<u32, u32>,
+    st_count: &HashMap<u32, u32>,
+) -> HashMap<u32, UserAggregate> {
+    let mut aggregate_data = HashMap::new();
+    for (&user_id, &attendance) in attendance_count {
+        let st_rewards = *st_count.get(&user_id).unwrap_or(&0);
+        aggregate_data.insert(
+            user_id,
+            UserAggregate {
+                attendance,
+                st_rewards,
+            },
+        );
+    }
+    aggregate_data
 }
 
 #[tauri::command]
@@ -97,11 +120,13 @@ fn analyze_calendar_data(
         );
     }
 
+    let user_aggregate: HashMap<u32, UserAggregate> =
+        aggregate_user_data(&attendance_count, &st_count);
+
     CalendarData {
         year: data.year,
         month: data.month,
         days: new_days,
-        attendance_count,
-        st_count,
+        user_aggregate,
     }
 }

@@ -10,6 +10,5 @@ export const calendarData = writable<AnalyzeCalendarData>({
   year: currentYear,
   month: currentMonth,
   days: {},
-  attendanceCount: {},
-  stCount: {},
+  userAggregate: {},
 });

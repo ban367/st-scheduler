@@ -3,6 +3,11 @@ export interface UserData {
   name: string;
 }
 
+interface UserAggregate {
+  attendance: number;
+  stRewards: number;
+}
+
 export interface CalendarDay {
   userIds: number[];
   stUserIds: number[];
@@ -18,6 +23,5 @@ export interface AnalyzeCalendarData {
   year: number;
   month: number;
   days: { [key: string]: CalendarDay };
-  attendanceCount: { [key: number]: number };
-  stCount: { [key: number]: number };
+  userAggregate: { [key: number]: UserAggregate };
 }
