@@ -25,7 +25,7 @@
   }
 
   function parseData(csvText: string): { userData: UserData[]; days: { [key: string]: CalendarDay } } {
-    const { data, errors } = parse<string[]>(csvText, { header: true, skipEmptyLines: true });
+    const { data } = parse<string[]>(csvText, { header: true, skipEmptyLines: true });
     const userMap = new Map<string, number>();
     let userId = 1;
     const userData: UserData[] = [];
