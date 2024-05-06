@@ -29,10 +29,9 @@ struct CalendarData {
 }
 
 #[tauri::command]
-fn analyze_calendar_data(data: CalendarData) -> CalendarData {
+fn analyze_calendar_data(data: CalendarData, exclude_user_ids: Vec<u32>) -> CalendarData {
     let mut attendance_count = HashMap::new();
 
-    // 出席回数をカウント
     for day in data.days.values() {
         for &user_id in &day.user_ids {
             *attendance_count.entry(user_id).or_insert(0) += 1;
@@ -42,7 +41,6 @@ fn analyze_calendar_data(data: CalendarData) -> CalendarData {
     let mut user_assignments = HashMap::new();
     let mut st_count = HashMap::new();
 
-    // 各ユーザーの割り当て可能な回数を設定
     for (user_id, count) in &attendance_count {
         let assignments = if *count >= 12 {
             6
@@ -54,18 +52,20 @@ fn analyze_calendar_data(data: CalendarData) -> CalendarData {
             0
         };
         user_assignments.insert(*user_id, assignments);
-        st_count.insert(*user_id, 0); // 割り当てた回数の初期化
+        st_count.insert(*user_id, 0);
     }
 
     let mut new_days = HashMap::new();
     for (date, day) in &data.days {
-        let mut available_st = 7; // 1日に割り当て可能なSTの最大数
+        let mut available_st = 7;
         let mut day_rewards = Vec::new();
         let mut sorted_user_ids = day.user_ids.clone();
-        // 割り当てる報酬の多い順にユーザーをソート
-        sorted_user_ids.sort_by_key(|&id| user_assignments.get(&id).unwrap_or(&0));
+        sorted_user_ids.sort_by_key(|&id| -(*user_assignments.get(&id).unwrap_or(&0)));
         for &user_id in &sorted_user_ids {
-            if available_st > 0 && user_assignments.get(&user_id).unwrap_or(&0) > &0 {
+            if !exclude_user_ids.contains(&user_id)
+                && available_st > 0
+                && user_assignments.get(&user_id).unwrap_or(&0) > &0
+            {
                 day_rewards.push(user_id);
                 *user_assignments.get_mut(&user_id).unwrap() -= 1;
                 *st_count.get_mut(&user_id).unwrap() += 1;

@@ -3,8 +3,10 @@
   import { calendarData } from "$lib/stores/user";
   import type { AnalyzeCalendarData } from "$lib/types/user";
 
+  const excludeUserIds = [1, 2];
+
   async function analyzeCalendarData() {
-    const response = await invoke("analyze_calendar_data", { data: $calendarData });
+    const response = await invoke("analyze_calendar_data", { data: $calendarData, excludeUserIds: excludeUserIds });
     $calendarData = response as AnalyzeCalendarData;
   }
 </script>
