@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![process_calendar_data])
+        .invoke_handler(tauri::generate_handler![analyze_calendar_data])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -13,7 +13,6 @@ fn main() {
 struct CalendarDay {
     #[serde(rename = "userIds")]
     user_ids: Vec<u32>,
-
     #[serde(rename = "stUserIds")]
     st_user_ids: Vec<u32>,
 }
@@ -23,10 +22,14 @@ struct CalendarData {
     year: u32,
     month: u32,
     days: HashMap<String, CalendarDay>,
+    #[serde(rename = "attendanceCount", default)]
+    attendance_count: HashMap<u32, u32>,
+    #[serde(rename = "stCount", default)]
+    st_count: HashMap<u32, u32>,
 }
 
 #[tauri::command]
-fn process_calendar_data(data: CalendarData) -> CalendarData {
+fn analyze_calendar_data(data: CalendarData) -> CalendarData {
     let mut attendance_count = HashMap::new();
 
     // 出席回数をカウント
@@ -37,6 +40,9 @@ fn process_calendar_data(data: CalendarData) -> CalendarData {
     }
 
     let mut user_assignments = HashMap::new();
+    let mut st_count = HashMap::new();
+
+    // 各ユーザーの割り当て可能な回数を設定
     for (user_id, count) in &attendance_count {
         let assignments = if *count >= 12 {
             6
@@ -48,6 +54,7 @@ fn process_calendar_data(data: CalendarData) -> CalendarData {
             0
         };
         user_assignments.insert(*user_id, assignments);
+        st_count.insert(*user_id, 0); // 割り当てた回数の初期化
     }
 
     let mut new_days = HashMap::new();
@@ -61,6 +68,7 @@ fn process_calendar_data(data: CalendarData) -> CalendarData {
             if available_st > 0 && user_assignments.get(&user_id).unwrap_or(&0) > &0 {
                 day_rewards.push(user_id);
                 *user_assignments.get_mut(&user_id).unwrap() -= 1;
+                *st_count.get_mut(&user_id).unwrap() += 1;
                 available_st -= 1;
             }
         }
@@ -77,5 +85,7 @@ fn process_calendar_data(data: CalendarData) -> CalendarData {
         year: data.year,
         month: data.month,
         days: new_days,
+        attendance_count,
+        st_count,
     }
 }
