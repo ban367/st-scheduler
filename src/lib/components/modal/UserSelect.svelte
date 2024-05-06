@@ -4,7 +4,7 @@
   import type { UserData } from "$lib/types/user";
   import type { InputEventDetail } from "$lib/types/form";
 
-  import UserList from "$lib/components/UserList.svelte";
+  import UserSearch from "$lib/components/UserSearch.svelte";
 
   export let parent: SvelteComponent;
   export let title: string;
@@ -40,7 +40,7 @@
   <div class="w-modal relative rounded-lg bg-white p-8 shadow-xl">
     <p class="text-xl font-bold">{title}</p>
     <div class="mb-8 mt-2">
-      <UserList {userList} on:input={handleInput} />
+      <UserSearch {userList} on:input={handleInput} />
     </div>
     <div class="space-x-2 text-right">
       <button type="button" class={cButton} on:click={onConfirm}>はい</button>
