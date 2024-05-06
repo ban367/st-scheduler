@@ -1,7 +1,7 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/tauri";
-  import { calendarData } from "$lib/stores/user";
-  import type { AnalyzeCalendarData } from "$lib/types/user";
+  import { calendarData } from "$lib/stores/calendar";
+  import type { AnalyzeData } from "$lib/types/calendar";
 
   const excludeUserIds = [1, 2];
   const excludeDates = [7, 15];
@@ -13,7 +13,7 @@
       excludeDates: excludeDates,
     });
     console.log(response);
-    $calendarData = response as AnalyzeCalendarData;
+    $calendarData = response as AnalyzeData;
   }
 </script>
 

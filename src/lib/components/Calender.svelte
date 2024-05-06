@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { userData, calendarData } from "$lib/stores/user";
+  import { userData } from "$lib/stores/user";
+  import { calendarData } from "$lib/stores/calendar";
   import { getModalStore } from "@skeletonlabs/skeleton";
   import type { ModalSettings, ModalComponent } from "@skeletonlabs/skeleton";
 

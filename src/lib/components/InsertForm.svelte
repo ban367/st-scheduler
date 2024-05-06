@@ -1,7 +1,9 @@
 <script lang="ts">
   import { parse } from "papaparse";
-  import { userData, calendarData } from "$lib/stores/user";
-  import type { UserData, CalendarDay } from "$lib/types/user";
+  import { userData } from "$lib/stores/user";
+  import { calendarData } from "$lib/stores/calendar";
+  import type { UserData } from "$lib/types/user";
+  import type { CalendarDay } from "$lib/types/calendar";
 
   let fileInput: HTMLInputElement;
 
