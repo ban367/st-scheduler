@@ -29,7 +29,11 @@ struct CalendarData {
 }
 
 #[tauri::command]
-fn analyze_calendar_data(data: CalendarData, exclude_user_ids: Vec<u32>) -> CalendarData {
+fn analyze_calendar_data(
+    data: CalendarData,
+    exclude_user_ids: Vec<u32>,
+    exclude_dates: Vec<u32>,
+) -> CalendarData {
     let mut attendance_count = HashMap::new();
 
     for day in data.days.values() {
@@ -57,6 +61,18 @@ fn analyze_calendar_data(data: CalendarData, exclude_user_ids: Vec<u32>) -> Cale
 
     let mut new_days = HashMap::new();
     for (date, day) in &data.days {
+        let date_key = date.parse::<u32>().unwrap_or(0);
+        if exclude_dates.contains(&date_key) {
+            new_days.insert(
+                date.clone(),
+                CalendarDay {
+                    user_ids: day.user_ids.clone(),
+                    st_user_ids: Vec::new(),
+                },
+            );
+            continue;
+        }
+
         let mut available_st = 7;
         let mut day_rewards = Vec::new();
         let mut sorted_user_ids = day.user_ids.clone();

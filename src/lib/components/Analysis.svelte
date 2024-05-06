@@ -4,9 +4,15 @@
   import type { AnalyzeCalendarData } from "$lib/types/user";
 
   const excludeUserIds = [1, 2];
+  const excludeDates = [7, 15];
 
   async function analyzeCalendarData() {
-    const response = await invoke("analyze_calendar_data", { data: $calendarData, excludeUserIds: excludeUserIds });
+    const response = await invoke("analyze_calendar_data", {
+      data: $calendarData,
+      excludeUserIds: excludeUserIds,
+      excludeDates: excludeDates,
+    });
+    console.log(response);
     $calendarData = response as AnalyzeCalendarData;
   }
 </script>
