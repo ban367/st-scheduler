@@ -5,6 +5,7 @@
   import { getModalStore } from "@skeletonlabs/skeleton";
   import type { ModalSettings, ModalComponent } from "@skeletonlabs/skeleton";
 
+  import { updateUserIds } from "$lib/stores/calendar";
   import ModalUserSelect from "$lib/components/modal/UserSelect.svelte";
 
   const initialDate: Date = new Date();
@@ -94,10 +95,7 @@
           if (getUserName(userId) === unknownName) {
             return;
           }
-          if (!days[day].userIds.includes(userId)) {
-            days[day].userIds.push(userId);
-            days = days.slice();
-          }
+          updateUserIds(Number(days[day].day), [...days[day].userIds, userId]);
         }
       },
     };

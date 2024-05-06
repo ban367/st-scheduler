@@ -11,3 +11,16 @@ export const calendarData = writable<AnalyzeData>({
   days: {},
   userAggregate: {},
 });
+
+export function updateUserIds(day: number, newUserIds: number[]) {
+  calendarData.update((data) => {
+    if (!data.days[day]) {
+      data.days[day] = {
+        userIds: [],
+        stUserIds: [],
+      };
+    }
+    data.days[day].userIds = newUserIds;
+    return data;
+  });
+}
