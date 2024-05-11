@@ -1,6 +1,7 @@
 <script lang="ts">
   import "../app.postcss";
-  import { AppBar } from "@skeletonlabs/skeleton";
+  import { page } from "$app/stores";
+  import { AppRail, AppRailTile, AppRailAnchor } from "@skeletonlabs/skeleton";
   import { Toast, Modal, initializeStores } from "@skeletonlabs/skeleton";
   import Icon from "@iconify/svelte";
 
@@ -14,23 +15,35 @@
   <title>Schedule</title>
 </svelte:head>
 
-<div class="flex min-h-screen flex-col">
-  <div class="border-b">
-    <AppBar class="!p-3">
-      <div class="flex items-center">
-        <a href="/" class="flex items-center">
-          <Icon icon="mdi-light:home" height="20" />
-          <div class="text-lg">Top</div>
-        </a>
-      </div>
-    </AppBar>
+<div class="flex min-h-screen">
+  <div>
+    <AppRail>
+      <svelte:fragment slot="lead">
+        <AppRailAnchor href="/">
+          <div class="flex h-full items-center justify-center">
+            <Icon icon="mdi:menu" height="26" />
+          </div>
+        </AppRailAnchor>
+      </svelte:fragment>
+      <AppRailAnchor href="/" selected={$page.url.pathname === "/"}>
+        <div class="flex h-full items-center justify-center">
+          <Icon icon="mdi:home" height="26" />
+        </div>
+      </AppRailAnchor>
+      <AppRailAnchor href="/calendar" selected={$page.url.pathname === "/calendar"}>
+        <div class="flex h-full items-center justify-center">
+          <Icon icon="mdi:calendar" height="26" />
+        </div>
+      </AppRailAnchor>
+      <AppRailAnchor href="/settings" selected={$page.url.pathname === "/settings"}>
+        <div class="flex h-full items-center justify-center">
+          <Icon icon="mdi:settings" height="26" />
+        </div>
+      </AppRailAnchor>
+    </AppRail>
   </div>
 
-  <div class="mx-2 flex-1 overflow-auto">
+  <div class="flex-1 overflow-auto">
     <slot />
-  </div>
-
-  <div class="w-full border-t bg-gray-500 px-2 text-center text-sm text-white">
-    <p>フッター</p>
   </div>
 </div>
