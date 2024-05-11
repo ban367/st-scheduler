@@ -16,34 +16,35 @@
     [];
 
   function generateCalendar(month: number, year: number): void {
+    let correctedMonth = month - 1; // JSの処理用に月を調整
     days = [];
-    let daysInMonth: number = new Date(year, month + 1, 0).getDate();
-    let firstDayOfMonth: number = new Date(year, month, 1).getDay();
+    let daysInMonth: number = new Date(year, correctedMonth + 1, 0).getDate();
+    let firstDayOfMonth: number = new Date(year, correctedMonth, 1).getDay();
 
     for (let i = 0; i < firstDayOfMonth; i++) {
       days.push({ day: "", userIds: [], stUserIds: [], isToday: false, isWeekend: false });
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
-      let date = new Date(year, month, day);
+      let date = new Date(year, correctedMonth, day);
       let isWeekend = date.getDay() === 0 || date.getDay() === 6;
       days.push({
         day: day,
         userIds:
           $calendarData &&
           $calendarData.year === year &&
-          $calendarData.month === month + 1 &&
+          $calendarData.month === month &&
           $calendarData.days[day.toString()]
             ? $calendarData.days[day.toString()].userIds
             : [],
         stUserIds:
           $calendarData &&
           $calendarData.year === year &&
-          $calendarData.month === month + 1 &&
+          $calendarData.month === month &&
           $calendarData.days[day.toString()]
             ? $calendarData.days[day.toString()].stUserIds
             : [],
-        isToday: isToday(day, month, year),
+        isToday: isToday(day, correctedMonth, year),
         isWeekend: isWeekend,
       });
     }
@@ -100,7 +101,7 @@
     modalStore.trigger(modal);
   }
 
-  $: $calendarData, generateCalendar($currentMonth, $currentYear);
+  $: generateCalendar($currentMonth, $currentYear);
 
   onMount(() => {
     generateCalendar($currentMonth, $currentYear);
@@ -111,7 +112,7 @@
   <div class="mb-2 flex justify-between">
     <button class="rounded bg-blue-500 px-4 py-2 text-white" on:click={() => navigateMonth(-1)}>&lt; 前月</button>
     <button class="cursor-pointer rounded px-4 py-2 text-center" on:click={resetToToday}>
-      {$currentYear}年 {$currentMonth + 1}月
+      {$currentYear}年 {$currentMonth}月
     </button>
     <button class="rounded bg-blue-500 px-4 py-2 text-white" on:click={() => navigateMonth(1)}>次月 &gt;</button>
   </div>
