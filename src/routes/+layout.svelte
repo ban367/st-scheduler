@@ -16,7 +16,7 @@
 </svelte:head>
 
 <div class="flex min-h-screen">
-  <div>
+  <div class="sticky top-0 h-screen">
     <AppRail>
       <svelte:fragment slot="lead">
         <AppRailAnchor href="/">
