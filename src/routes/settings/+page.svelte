@@ -1,3 +1,5 @@
-<div>
-  <p>設定ページ</p>
-</div>
+<script lang="ts">
+  import Maintenance from "$lib/components/Maintenance.svelte";
+</script>
+
+<Maintenance />

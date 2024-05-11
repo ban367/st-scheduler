@@ -30,6 +30,11 @@
           <Icon icon="mdi:home" height="26" />
         </div>
       </AppRailAnchor>
+      <AppRailAnchor href="/user" selected={$page.url.pathname === "/user"}>
+        <div class="flex h-full items-center justify-center">
+          <Icon icon="mdi:user" height="26" />
+        </div>
+      </AppRailAnchor>
       <AppRailAnchor href="/calendar" selected={$page.url.pathname === "/calendar"}>
         <div class="flex h-full items-center justify-center">
           <Icon icon="mdi:calendar" height="26" />

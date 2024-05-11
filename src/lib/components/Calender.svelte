@@ -11,9 +11,6 @@
 
   const initialDate: Date = new Date();
   const unknownName = "Unknown";
-  // let today: Date = new Date();
-  // let currentMonth: number = today.getMonth();
-  // let $currentYear: number = today.getFullYear();
 
   let days: { day: number | string; userIds: number[]; stUserIds: number[]; isToday: boolean; isWeekend: boolean }[] =
     [];
