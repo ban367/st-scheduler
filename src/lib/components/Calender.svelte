@@ -67,7 +67,7 @@
   }
 
   function resetToToday(): void {
-    $currentMonth = initialDate.getMonth();
+    $currentMonth = initialDate.getMonth() + 1;
     $currentYear = initialDate.getFullYear();
     generateCalendar($currentMonth, $currentYear);
   }
