@@ -101,7 +101,7 @@
     modalStore.trigger(modal);
   }
 
-  $: generateCalendar($currentMonth, $currentYear);
+  $: $calendarData, generateCalendar($currentMonth, $currentYear);
 
   onMount(() => {
     generateCalendar($currentMonth, $currentYear);
