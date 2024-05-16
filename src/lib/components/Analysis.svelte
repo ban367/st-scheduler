@@ -1,19 +1,16 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/tauri";
   import { calendarData } from "$lib/stores/calendar";
-  import { currentYear, currentMonth } from "$lib/stores/calendar";
+  import { excludeDays } from "$lib/stores/calendar";
   import { userData } from "$lib/stores/user";
 
   import type { AnalyzeData, UserAggregate } from "$lib/types/calendar";
-
-  let excludeDates: number[] = [];
-  let selectExcludeDates: number[] = [];
 
   async function analyzeCalendarData() {
     const response = (await invoke("analyze_calendar_data", {
       data: $calendarData,
       excludeUserIds: getSelectExcludeUserIds(),
-      excludeDates: selectExcludeDates,
+      excludeDates: $excludeDays,
     })) as AnalyzeData;
 
     $calendarData = {
@@ -22,17 +19,6 @@
       days: response.days,
     };
     updateUserListFromAggregate(response.userAggregate);
-  }
-
-  function getDaysInMonth() {
-    const date = new Date($currentYear, $currentMonth, 1);
-    const days: number[] = [];
-
-    while (date.getMonth() === $currentMonth) {
-      days.push(date.getDate());
-      date.setDate(date.getDate() + 1);
-    }
-    excludeDates = days;
   }
 
   function getSelectExcludeUserIds() {
@@ -52,8 +38,6 @@
       return user;
     });
   }
-
-  $: $currentMonth, getDaysInMonth();
 </script>
 
 <div class="">

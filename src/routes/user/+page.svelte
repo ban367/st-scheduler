@@ -3,7 +3,9 @@
   import type { ModalSettings, ModalComponent } from "@skeletonlabs/skeleton";
 
   import { userData } from "$lib/stores/user";
+  import { currentYear, currentMonth, excludeDays } from "$lib/stores/calendar";
   import UserList from "$lib/components/UserList.svelte";
+  import SelectCalendar from "$lib/components/SelectCalendar.svelte";
   import ModalInsertUser from "$lib/components/modal/InsertUser.svelte";
 
   const modalStore = getModalStore();
@@ -25,6 +27,8 @@
     };
     modalStore.trigger(modal);
   }
+
+  let selectDay = excludeDays;
 </script>
 
 <div class="ml-3">
@@ -35,5 +39,12 @@
     </div>
   </div>
 
-  <UserList bind:userList={$userData} />
+  <div class="grid grid-cols-5 gap-4">
+    <div class="col-span-2">
+      <UserList bind:userList={$userData} />
+    </div>
+    <div class="col-span-2">
+      <SelectCalendar year={$currentYear} month={$currentMonth - 1} bind:selectDays={selectDay} />
+    </div>
+  </div>
 </div>

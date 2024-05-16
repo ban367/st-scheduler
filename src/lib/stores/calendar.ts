@@ -6,6 +6,8 @@ const currentDate = new Date();
 export const currentYear = writable(currentDate.getFullYear());
 export const currentMonth = writable(currentDate.getMonth() + 1);
 
+export const excludeDays = writable<number[]>([]);
+
 export const calendarData = writable<CalendarData>({
   year: currentDate.getFullYear(),
   month: currentDate.getMonth() + 1,

@@ -12,14 +12,14 @@
   }
 </script>
 
-<div>
-  <table>
+<div class="table-container">
+  <table class="table table-hover">
     <thead>
       <tr>
         <th>名前</th>
         <th>出席数</th>
         <th>ST割当数</th>
-        <th>ST対象者</th>
+        <th>ST対象</th>
       </tr>
     </thead>
     <tbody>
