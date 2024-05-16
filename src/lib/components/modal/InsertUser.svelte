@@ -54,7 +54,7 @@
         if (!key.startsWith("Student") || name.trim() === "") return;
         if (!userMap.has(name)) {
           userMap.set(name, userId);
-          userData.push({ id: userId, name });
+          userData.push({ id: userId, name, attendance: 0, stRewards: 0, isIgnore: false });
           userId++;
         }
       });

@@ -1,4 +1,4 @@
-interface UserAggregate {
+export interface UserAggregate {
   attendance: number;
   stRewards: number;
 }
@@ -14,9 +14,6 @@ export interface CalendarData {
   days: { [key: string]: CalendarDay };
 }
 
-export interface AnalyzeData {
-  year: number;
-  month: number;
-  days: { [key: string]: CalendarDay };
+export interface AnalyzeData extends CalendarData {
   userAggregate: { [key: number]: UserAggregate };
 }

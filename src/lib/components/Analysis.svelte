@@ -2,19 +2,26 @@
   import { invoke } from "@tauri-apps/api/tauri";
   import { calendarData } from "$lib/stores/calendar";
   import { currentYear, currentMonth } from "$lib/stores/calendar";
-  import type { AnalyzeData } from "$lib/types/calendar";
+  import { userData } from "$lib/stores/user";
 
-  let selectExcludeUserIds: number[] = [];
+  import type { AnalyzeData, UserAggregate } from "$lib/types/calendar";
+
   let excludeDates: number[] = [];
   let selectExcludeDates: number[] = [];
 
   async function analyzeCalendarData() {
-    const response = await invoke("analyze_calendar_data", {
+    const response = (await invoke("analyze_calendar_data", {
       data: $calendarData,
-      excludeUserIds: selectExcludeUserIds,
+      excludeUserIds: getSelectExcludeUserIds(),
       excludeDates: selectExcludeDates,
-    });
-    $calendarData = response as AnalyzeData;
+    })) as AnalyzeData;
+
+    $calendarData = {
+      year: response.year,
+      month: response.month,
+      days: response.days,
+    };
+    updateUserListFromAggregate(response.userAggregate);
   }
 
   function getDaysInMonth() {
@@ -28,12 +35,27 @@
     excludeDates = days;
   }
 
+  function getSelectExcludeUserIds() {
+    return $userData.filter((user) => user.isIgnore).map((user) => user.id);
+  }
+
+  function updateUserListFromAggregate(userAggregate: { [key: number]: UserAggregate }) {
+    $userData = $userData.map((user) => {
+      const aggregate = userAggregate[user.id];
+      if (aggregate) {
+        return {
+          ...user,
+          attendance: aggregate.attendance,
+          stRewards: aggregate.stRewards,
+        };
+      }
+      return user;
+    });
+  }
+
   $: $currentMonth, getDaysInMonth();
 </script>
 
 <div class="">
   <button class="w-12 rounded bg-slate-400" on:click={analyzeCalendarData}>解析</button>
 </div>
-
-<!-- デバッグ用 -->
-<!-- <pre class="mt-2 overflow-x-auto rounded bg-gray-100 p-4">{JSON.stringify($calendarData, null, 2)}</pre> -->

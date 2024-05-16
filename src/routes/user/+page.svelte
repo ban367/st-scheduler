@@ -2,6 +2,8 @@
   import { getModalStore } from "@skeletonlabs/skeleton";
   import type { ModalSettings, ModalComponent } from "@skeletonlabs/skeleton";
 
+  import { userData } from "$lib/stores/user";
+  import UserList from "$lib/components/UserList.svelte";
   import ModalInsertUser from "$lib/components/modal/InsertUser.svelte";
 
   const modalStore = getModalStore();
@@ -32,4 +34,6 @@
       <button class="btn btn-sm border bg-white px-6" on:click={modalInsertUser}>ユーザーの追加</button>
     </div>
   </div>
+
+  <UserList bind:userList={$userData} />
 </div>
