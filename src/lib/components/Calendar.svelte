@@ -4,8 +4,8 @@
   import { calendarData } from "$lib/stores/calendar";
   import { getModalStore } from "@skeletonlabs/skeleton";
   import type { ModalSettings, ModalComponent } from "@skeletonlabs/skeleton";
-
-  import { currentYear, currentMonth } from "$lib/stores/calendar";
+  import { get, type Writable } from "svelte/store";
+  import { currentYear, currentMonth, excludeDays } from "$lib/stores/calendar";
   import { updateUserIds } from "$lib/stores/calendar";
   import ModalUserSelect from "$lib/components/modal/UserSelect.svelte";
 
@@ -101,6 +101,15 @@
     modalStore.trigger(modal);
   }
 
+  function selectDate(day: number) {
+    const currentDates = get(excludeDays);
+    if (!currentDates.includes(day)) {
+      excludeDays.set([...currentDates, day]);
+    } else {
+      excludeDays.set(currentDates.filter((d) => d !== day));
+    }
+  }
+
   $: $calendarData, generateCalendar($currentMonth, $currentYear);
 
   onMount(() => {
@@ -117,18 +126,26 @@
     <button class="rounded bg-blue-500 px-4 py-2 text-white" on:click={() => navigateMonth(1)}>次月 &gt;</button>
   </div>
   <div class="grid grid-cols-7 gap-1">
-    <div class="bg-red-200 p-2 text-center">日</div>
-    <div class="bg-gray-200 p-2 text-center">月</div>
-    <div class="bg-gray-200 p-2 text-center">火</div>
-    <div class="bg-gray-200 p-2 text-center">水</div>
-    <div class="bg-gray-200 p-2 text-center">木</div>
-    <div class="bg-gray-200 p-2 text-center">金</div>
-    <div class="bg-blue-200 p-2 text-center">土</div>
+    <div class="bg-red-200 py-2 text-center font-bold">Sun</div>
+    <div class="bg-gray-200 py-2 text-center font-bold">Mon</div>
+    <div class="bg-gray-200 py-2 text-center font-bold">Tue</div>
+    <div class="bg-gray-200 py-2 text-center font-bold">Wed</div>
+    <div class="bg-gray-200 py-2 text-center font-bold">Thu</div>
+    <div class="bg-gray-200 py-2 text-center font-bold">Fri</div>
+    <div class="bg-blue-200 py-2 text-center font-bold">Sat</div>
     {#each days as dayInfo, index}
       <div
         class={`p-2 text-center ${dayInfo.day ? "bg-white" : "bg-gray-100"} ${dayInfo.isToday ? "bg-yellow-200" : ""} `}
       >
-        <div>{dayInfo.day}</div>
+        <div class="flex items-center justify-between p-2 text-center">
+          <div>{dayInfo.day}</div>
+          <input
+            type="checkbox"
+            class="cursor-pointer"
+            checked={$excludeDays.includes(Number(dayInfo.day))}
+            on:change={() => selectDate(Number(dayInfo.day))}
+          />
+        </div>
         <div class="text-xs">
           {#each dayInfo.userIds as userId}
             <div class="flex">
