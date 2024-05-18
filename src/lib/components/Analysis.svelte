@@ -3,6 +3,7 @@
   import { calendarData } from "$lib/stores/calendar";
   import { excludeDays } from "$lib/stores/calendar";
   import { userData } from "$lib/stores/user";
+  import { cButton } from "$lib/utils/constant";
 
   import type { AnalyzeData, UserAggregate } from "$lib/types/calendar";
 
@@ -41,5 +42,5 @@
 </script>
 
 <div class="">
-  <button class="w-12 rounded bg-slate-400" on:click={analyzeCalendarData}>解析</button>
+  <button class={cButton} on:click={analyzeCalendarData}>解析</button>
 </div>

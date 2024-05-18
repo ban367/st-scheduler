@@ -3,9 +3,9 @@
   import type { ModalSettings, ModalComponent } from "@skeletonlabs/skeleton";
 
   import { userData } from "$lib/stores/user";
-  import { excludeDays } from "$lib/stores/calendar";
   import UserList from "$lib/components/UserList.svelte";
   import ModalInsertUser from "$lib/components/modal/InsertUser.svelte";
+  import { cButton } from "$lib/utils/constant";
 
   const modalStore = getModalStore();
 
@@ -31,7 +31,7 @@
   <div class="">
     <h4 class="h4">出席データの登録</h4>
     <div class="">
-      <button class="btn btn-sm border bg-white px-6" on:click={modalInsertUser}>ユーザーの追加</button>
+      <button class={cButton} on:click={modalInsertUser}>ユーザーの追加</button>
     </div>
   </div>
 

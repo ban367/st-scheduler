@@ -6,6 +6,7 @@
   import { userData } from "$lib/stores/user";
   import { calendarData } from "$lib/stores/calendar";
   import { currentYear, currentMonth } from "$lib/stores/calendar";
+  import { cButton } from "$lib/utils/constant";
   import type { UserData } from "$lib/types/user";
   import type { CalendarDay } from "$lib/types/calendar";
 
@@ -124,7 +125,7 @@
     <div class="flex">
       <div class="flex-1 text-center">
         <button
-          class="btn mr-2 w-40 border border-indigo-800 bg-white focus:!outline-none"
+          class={cButton}
           on:click={updateStore}
           disabled={fileInput === undefined || fileInput.files === undefined}
         >
@@ -132,13 +133,7 @@
         </button>
       </div>
       <div class="flex-1 text-center">
-        <button
-          type="button"
-          class="btn mr-2 w-40 border border-indigo-800 bg-white focus:!outline-none"
-          on:click={parent.onClose}
-        >
-          キャンセル
-        </button>
+        <button type="button" class={cButton} on:click={parent.onClose}> キャンセル </button>
       </div>
     </div>
   </div>
