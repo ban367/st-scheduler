@@ -97,7 +97,7 @@
     <div class="mb-3 mt-2">
       <p>日付ごとに分割したデータをアップロードしてください</p>
     </div>
-    <div class="mb-2 flex items-center">
+    <div class="mb-3 flex items-center">
       <label class="label flex items-center">
         <span class="pr-4">登録する年月:</span>
         <input type="month" class="!mt-0" bind:value={monthValue} on:input={onMonthInput} />
