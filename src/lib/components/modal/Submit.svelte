@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getModalStore } from "@skeletonlabs/skeleton";
   import type { SvelteComponent } from "svelte";
+  import { cButton } from "$lib/utils/constant";
 
   export let parent: SvelteComponent;
   export let title: string;
@@ -13,8 +14,6 @@
     }
     modalStore.close();
   }
-
-  const cButton = "btn bg-white border border-gray-400 px-12 focus:!outline-none";
 </script>
 
 {#if $modalStore[0]}

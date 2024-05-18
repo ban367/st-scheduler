@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { getModalStore } from "@skeletonlabs/skeleton";
   import type { ModalSettings, ModalComponent } from "@skeletonlabs/skeleton";
 
@@ -9,6 +10,11 @@
 
   const modalStore = getModalStore();
 
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  const cModalBackdrop = "!bg-gray-300/80";
   function modalInsertUser(): void {
     const MyModalComponent: ModalComponent = {
       ref: ModalInsertUser,
@@ -16,28 +22,36 @@
     const modal: ModalSettings = {
       type: "component",
       component: MyModalComponent,
-      backdropClasses: "!bg-gray-300/80",
+      backdropClasses: cModalBackdrop,
       response: (isConfirm: boolean) => {
         if (isConfirm) {
-          console.log("Confirmed");
+          scrollToTop();
         }
       },
     };
     modalStore.trigger(modal);
   }
+
+  onMount(() => {
+    if ($userData.length === 0) {
+      modalInsertUser();
+    }
+  });
 </script>
 
-<div class="ml-3">
-  <div class="">
-    <h4 class="h4">出席データの登録</h4>
-    <div class="">
-      <button class={cButton} on:click={modalInsertUser}>ユーザーの追加</button>
+<div class="ml-4 mt-4">
+  {#if $userData.length === 0}
+    <p>データが登録されていません</p>
+  {:else}
+    <div class="w-[600px]">
+      <div class="">
+        <UserList bind:userList={$userData} />
+      </div>
     </div>
-  </div>
-
-  <div class="grid grid-cols-5 gap-4">
-    <div class="col-span-2">
-      <UserList bind:userList={$userData} />
+    <div class="mb-5 mr-5 mt-2 flex justify-end">
+      <div class="mx-3">
+        <button class={cButton} on:click={modalInsertUser}>データの再登録</button>
+      </div>
     </div>
-  </div>
+  {/if}
 </div>

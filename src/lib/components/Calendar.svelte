@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { get } from "svelte/store";
   import { userData } from "$lib/stores/user";
   import { calendarData } from "$lib/stores/calendar";
   import { getModalStore } from "@skeletonlabs/skeleton";
   import type { ModalSettings, ModalComponent } from "@skeletonlabs/skeleton";
-  import { get, type Writable } from "svelte/store";
   import { currentYear, currentMonth, excludeDays } from "$lib/stores/calendar";
   import { updateUserIds } from "$lib/stores/calendar";
   import ModalUserSelect from "$lib/components/modal/UserSelect.svelte";
@@ -138,23 +138,32 @@
         class={`p-2 text-center ${dayInfo.day ? "bg-white" : "bg-gray-100"} ${dayInfo.isToday ? "bg-yellow-200" : ""} `}
       >
         <div class="flex items-center justify-between p-2 text-center">
-          <div>{dayInfo.day}</div>
-          <input
-            type="checkbox"
-            class="cursor-pointer"
-            checked={$excludeDays.includes(Number(dayInfo.day))}
-            on:change={() => selectDate(Number(dayInfo.day))}
-          />
+          {#if dayInfo.day}
+            <div>{dayInfo.day}</div>
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                id="day-{dayInfo.day}"
+                class="mr-1 h-4 w-4 cursor-pointer accent-sky-300"
+                checked={!$excludeDays.includes(Number(dayInfo.day))}
+                on:change={() => selectDate(Number(dayInfo.day))}
+              />
+              <label for="day-{dayInfo.day}" class="flex-1 text-left">ST割当</label>
+            </div>
+          {/if}
         </div>
         <div class="text-xs">
           {#each dayInfo.userIds as userId}
             <div class="flex">
-              <input
-                type="checkbox"
-                id="user-{userId}-{index}"
-                checked={dayInfo.stUserIds && dayInfo.stUserIds.includes(userId)}
-              />
-              <label for="user-{userId}-{index}">{getUserName(userId)}</label>
+              <div class="flex items-center">
+                <input
+                  type="checkbox"
+                  id="user-{userId}-{index}"
+                  class="mr-1 h-4 w-4 cursor-pointer accent-emerald-300"
+                  checked={dayInfo.stUserIds && dayInfo.stUserIds.includes(userId)}
+                />
+                <label for="user-{userId}-{index}">{getUserName(userId)}</label>
+              </div>
             </div>
           {/each}
         </div>

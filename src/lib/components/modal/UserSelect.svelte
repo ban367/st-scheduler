@@ -3,6 +3,7 @@
   import type { SvelteComponent } from "svelte";
   import type { UserData } from "$lib/types/user";
   import type { InputEventDetail } from "$lib/types/form";
+  import { cButton } from "$lib/utils/constant";
 
   import UserSearch from "$lib/components/UserSearch.svelte";
 
@@ -32,8 +33,6 @@
       selectUserId = userId;
     }
   }
-
-  const cButton = "btn bg-white border border-gray-400 px-12 focus:!outline-none";
 </script>
 
 {#if $modalStore[0]}

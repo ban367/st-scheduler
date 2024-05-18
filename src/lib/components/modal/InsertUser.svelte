@@ -28,17 +28,20 @@
   }
 
   async function updateStore() {
-    if (fileInput != undefined && fileInput.files) {
-      const file = fileInput.files[0];
-      if (file) {
-        const text = await file.text();
-        const { userData: newUserData, days } = parseData(text);
-        userData.set(newUserData);
-        calendarData.update((currentData) => {
-          return { ...currentData, days };
-        });
-      } else {
-        console.log("No file selected");
+    if (typeof $modalStore[0]?.response === "function") {
+      if (fileInput != undefined && fileInput.files) {
+        const file = fileInput.files[0];
+        if (file) {
+          const text = await file.text();
+          const { userData: newUserData, days } = parseData(text);
+          userData.set(newUserData);
+          calendarData.update((currentData) => {
+            return { ...currentData, days };
+          });
+          $modalStore[0].response(true);
+        } else {
+          console.log("No file selected");
+        }
       }
     }
     modalStore.close();
@@ -97,7 +100,7 @@
     <div class="mb-2 flex items-center">
       <label class="label flex items-center">
         <span class="pr-4">登録する年月:</span>
-        <input type="month" bind:value={monthValue} on:input={onMonthInput} />
+        <input type="month" class="!mt-0" bind:value={monthValue} on:input={onMonthInput} />
       </label>
     </div>
     <div class="mb-6 flex items-center justify-center">
