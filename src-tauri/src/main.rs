@@ -1,10 +1,12 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use std::collections::HashMap;
+use std::fs;
+use tauri::api::path::download_dir;
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![analyze_calendar_data])
+        .invoke_handler(tauri::generate_handler![write_file, analyze_calendar_data])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -49,6 +51,15 @@ fn aggregate_user_data(
         );
     }
     aggregate_data
+}
+
+#[tauri::command]
+async fn write_file(filename: &str, content: &str) -> Result<String, String> {
+    let mut path = download_dir().ok_or("Could not find download directory")?;
+    path.push(filename);
+
+    fs::write(&path, content).map_err(|err| err.to_string())?;
+    Ok(path.to_string_lossy().to_string())
 }
 
 #[tauri::command]
