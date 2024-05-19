@@ -4,6 +4,7 @@
   import type { ModalSettings, ModalComponent } from "@skeletonlabs/skeleton";
 
   import { userData } from "$lib/stores/user";
+  import { initNextMonth } from "$lib/stores/calendar";
   import UserList from "$lib/components/UserList.svelte";
   import ModalInsertUser from "$lib/components/modal/InsertUser.svelte";
   import { cButton } from "$lib/utils/constant";
@@ -34,6 +35,7 @@
 
   onMount(() => {
     if ($userData.length === 0) {
+      initNextMonth();
       modalInsertUser();
     }
   });

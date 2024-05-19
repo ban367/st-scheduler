@@ -16,9 +16,7 @@
 
   let fileInput: HTMLInputElement;
 
-  function updateDate(value: string) {
-    const [year, month] = value.split("-").map(Number);
-
+  function updateDate(year: number, month: number) {
     currentYear.set(year);
     currentMonth.set(month);
 
@@ -83,12 +81,23 @@
     }
   }
 
-  function onMonthInput(event: Event) {
-    const target = event.target as HTMLInputElement;
-    updateDate(target.value);
+  function onYearInput(event: Event) {
+    const target = event.target as HTMLInputElement | null;
+    if (target !== null) {
+      const year = parseInt(target.value);
+      updateDate(year, $currentMonth);
+    }
   }
 
-  $: monthValue = `${$currentYear}-${String($currentMonth).padStart(2, "0")}`;
+  function onMonthInput(event: Event) {
+    const target = event.target as HTMLInputElement | null;
+    if (target !== null) {
+      const month = parseInt(target.value);
+      updateDate($currentYear, month);
+    }
+  }
+
+  $: monthValue = String($currentMonth).padStart(2, "0");
 </script>
 
 {#if $modalStore[0]}
@@ -97,10 +106,33 @@
     <div class="mb-3 mt-2">
       <p>日付ごとに分割したデータをアップロードしてください</p>
     </div>
-    <div class="mb-3 flex items-center">
+    <div class="mb-5 flex items-center">
+      <p class="pr-4">登録月:</p>
       <label class="label flex items-center">
-        <span class="pr-4">登録する年月:</span>
-        <input type="month" class="!mt-0" bind:value={monthValue} on:input={onMonthInput} />
+        <div class="!mt-0 flex items-center">
+          <input
+            type="number"
+            class="w-16 pr-2 text-center"
+            bind:value={$currentYear}
+            min="2000"
+            max="2100"
+            on:input={onYearInput}
+          />
+          <p class="ml-2">年</p>
+        </div>
+      </label>
+      <label class="label ml-4 flex items-center">
+        <div class="flex items-center">
+          <input
+            type="number"
+            class="w-12 pr-2 text-center"
+            bind:value={monthValue}
+            min="1"
+            max="12"
+            on:input={onMonthInput}
+          />
+          <p class="ml-2">月</p>
+        </div>
       </label>
     </div>
     <div class="mb-6 flex items-center justify-center">

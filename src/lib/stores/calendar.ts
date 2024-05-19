@@ -26,3 +26,19 @@ export function updateUserIds(day: number, newUserIds: number[]) {
     return data;
   });
 }
+
+export function initNextMonth() {
+  const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1);
+
+  const newYear = newDate.getFullYear();
+  const newMonth = newDate.getMonth() + 1;
+
+  currentYear.set(newYear);
+  currentMonth.set(newMonth);
+
+  calendarData.set({
+    year: newYear,
+    month: newMonth,
+    days: {},
+  });
+}
