@@ -67,6 +67,7 @@ fn analyze_calendar_data(
     data: CalendarData,
     exclude_user_ids: Vec<u32>,
     exclude_dates: Vec<u32>,
+    available_st: u32,
 ) -> CalendarData {
     let mut attendance_count = HashMap::new();
 
@@ -107,7 +108,7 @@ fn analyze_calendar_data(
             continue;
         }
 
-        let mut available_st = 7;
+        let mut available_st = available_st;
         let mut day_rewards = Vec::new();
         let mut sorted_user_ids = day.user_ids.clone();
         sorted_user_ids.sort_by_key(|&id| -(*user_assignments.get(&id).unwrap_or(&0)));

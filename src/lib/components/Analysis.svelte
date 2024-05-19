@@ -2,7 +2,7 @@
   import { invoke } from "@tauri-apps/api/tauri";
   import { calendarData } from "$lib/stores/calendar";
   import { excludeDays } from "$lib/stores/calendar";
-  import { userData } from "$lib/stores/user";
+  import { userData, available_st_count } from "$lib/stores/user";
   import { cButton } from "$lib/utils/constant";
 
   import type { AnalyzeData, UserAggregate } from "$lib/types/calendar";
@@ -12,6 +12,7 @@
       data: $calendarData,
       excludeUserIds: getSelectExcludeUserIds(),
       excludeDates: $excludeDays,
+      availableSt: $available_st_count,
     })) as AnalyzeData;
 
     $calendarData = {
