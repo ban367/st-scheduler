@@ -1,5 +1,27 @@
 <script lang="ts">
+  import { save } from "@tauri-apps/api/dialog";
+  import { writeTextFile } from "@tauri-apps/api/fs";
   import Icon from "@iconify/svelte";
+
+  const sampleCSVContent = `Day,Student 1,Student 2,Student 3,Student 4,Student 5,Student 6,Student 7,Student 8,Student 9,Student 10,Student 11,Student 12,Student 13,Student 14,Student 15
+1,佐藤 翔太,鈴木 花子,高橋 健太,田中 美咲,伊藤 優斗,渡辺 明美,山本 大輔,中村 恵,小林 誠,加藤 結衣,吉田 拓也,山田 千尋,佐々木 涼太,山口 奈々,松本 大地
+2,佐藤 翔太,鈴木 花子,高橋 健太,田中 美咲,井上 真央,木村 翔,林 奈々美`;
+
+  async function downloadSampleCSV() {
+    const defaultPath = "sample_user_data.csv";
+
+    try {
+      const path = await save({ defaultPath });
+      if (path) {
+        await writeTextFile(path, sampleCSVContent);
+        console.log(`Sample file saved to ${path}`);
+      } else {
+        console.log("File save was canceled");
+      }
+    } catch (error) {
+      console.error("Error writing sample file:", error);
+    }
+  }
 </script>
 
 <div class="ml-4 mt-4">
@@ -8,7 +30,13 @@
     <li>ユーザーの日付ごとのデータを用意する</li>
     <ul class="ml-10 list-disc space-y-1">
       <li>
-        <div class="flex">入力サンプル</div>
+        <div class="flex items-center">
+          <p class="mr-2">入力サンプル:</p>
+          <button class="btn h-8 border border-gray-500 bg-stone-50 focus:!outline-none" on:click={downloadSampleCSV}>
+            ダウンロード
+          </button>
+        </div>
+        <div>※日数は必ず合うように調整して利用してください</div>
       </li>
     </ul>
     <li>

@@ -168,7 +168,7 @@
         </button>
       </div>
       <div class="flex-1 text-center">
-        <button type="button" class={cButton} on:click={parent.onClose}> キャンセル </button>
+        <button type="button" class={cButton} on:click={parent.onClose}>キャンセル</button>
       </div>
     </div>
   </div>

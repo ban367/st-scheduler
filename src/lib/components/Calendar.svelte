@@ -186,7 +186,7 @@
           {/each}
         </div>
         {#if dayInfo.day}
-          <button class="mt-1 text-sm text-blue-500" on:click={() => modalAddUser(index)}>Add User</button>
+          <button class="mt-1 text-sm text-blue-500" on:click={() => modalAddUser(index)}>ユーザー追加</button>
         {/if}
       </div>
     {/each}
