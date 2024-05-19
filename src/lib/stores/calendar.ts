@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
-import type { CalendarData } from "$lib/types/calendar";
+import { userData } from "$lib/stores/user";
+import type { CalendarData, CalendarDay } from "$lib/types/calendar";
 
 const currentDate = new Date();
 
@@ -27,6 +28,22 @@ export function updateUserIds(day: number, newUserIds: number[]) {
   });
 }
 
+function getDaysInMonth(year: number, month: number): number {
+  return new Date(year, month, 0).getDate();
+}
+
+function updateDays(year: number, month: number) {
+  const daysInMonth = getDaysInMonth(year, month);
+  const newDays: { [key: number]: CalendarDay } = {};
+  for (let day = 1; day <= daysInMonth; day++) {
+    newDays[day] = {
+      userIds: [],
+      stUserIds: [],
+    };
+  }
+  return newDays;
+}
+
 export function initNextMonth() {
   const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1);
 
@@ -36,9 +53,37 @@ export function initNextMonth() {
   currentYear.set(newYear);
   currentMonth.set(newMonth);
 
+  const newDays = updateDays(newYear, newMonth);
+
   calendarData.set({
     year: newYear,
     month: newMonth,
-    days: {},
+    days: newDays,
   });
 }
+
+currentYear.subscribe((year) => {
+  let month;
+  currentMonth.subscribe((m) => {
+    month = m;
+    const newDays = updateDays(year, month);
+    calendarData.update((data) => {
+      data.days = newDays;
+      return data;
+    });
+    userData.set([]);
+  });
+});
+
+currentMonth.subscribe((month) => {
+  let year;
+  currentYear.subscribe((y) => {
+    year = y;
+    const newDays = updateDays(year, month);
+    calendarData.update((data) => {
+      data.days = newDays;
+      return data;
+    });
+    userData.set([]);
+  });
+});
