@@ -6,6 +6,8 @@
   import { userData } from "$lib/stores/user";
   import { calendarData, currentYear, currentMonth, excludeDays, updateUserIds } from "$lib/stores/calendar";
   import ModalUserSelect from "$lib/components/modal/UserSelect.svelte";
+  import ModalSubmit from "$lib/components/modal/Submit.svelte";
+  import Icon from "@iconify/svelte";
 
   const initialDate: Date = new Date();
   const unknownName = "Unknown";
@@ -62,11 +64,6 @@
     currentMonth.set(newMonth);
   }
 
-  function resetToToday(): void {
-    currentYear.set(initialDate.getFullYear());
-    currentMonth.set(initialDate.getMonth() + 1);
-  }
-
   function getUserName(userId: number): string {
     const user = $userData.find((user) => user.id === userId);
     return user ? user.name : unknownName;
@@ -92,6 +89,28 @@
     };
     modalStore.trigger(modal);
   }
+  function modalChangeMonth(step: number): void {
+    if ($userData.length === 0) {
+      navigateMonth(step);
+      return;
+    }
+    const MyModalComponent: ModalComponent = {
+      ref: ModalSubmit,
+      props: { title: "月を変更してもよろしいですか？" },
+      slot: "(変更すると登録情報は初期化されます)",
+    };
+    const modal: ModalSettings = {
+      type: "component",
+      component: MyModalComponent,
+      backdropClasses: cModalBackdrop,
+      response: (isConfirm: boolean) => {
+        if (isConfirm) {
+          navigateMonth(step);
+        }
+      },
+    };
+    modalStore.trigger(modal);
+  }
 
   function selectDate(day: number) {
     excludeDays.update((currentDates) => {
@@ -112,11 +131,17 @@
 
 <div class="p-4">
   <div class="mb-2 flex justify-between">
-    <button class="rounded bg-blue-500 px-4 py-2 text-white" on:click={() => navigateMonth(-1)}>&lt; 前月</button>
-    <button class="cursor-pointer rounded px-4 py-2 text-center" on:click={resetToToday}>
-      {$currentYear}年 {$currentMonth}月
+    <button class="flex items-center rounded bg-blue-500 px-4 py-2 text-white" on:click={() => modalChangeMonth(-1)}>
+      <Icon icon="mdi:chevron-left" class="h-5 w-5" />
+      <span>前月</span>
     </button>
-    <button class="rounded bg-blue-500 px-4 py-2 text-white" on:click={() => navigateMonth(1)}>次月 &gt;</button>
+    <div class="flex items-center">
+      <p>{$currentYear}年 {$currentMonth}月</p>
+    </div>
+    <button class="flex items-center rounded bg-blue-500 px-4 py-2 text-white" on:click={() => modalChangeMonth(1)}>
+      <span>次月</span>
+      <Icon icon="mdi:chevron-right" class="h-5 w-5" />
+    </button>
   </div>
   <div class="grid grid-cols-7 gap-1">
     <div class="bg-red-200 py-2 text-center font-bold">Sun</div>
