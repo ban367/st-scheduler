@@ -36,3 +36,11 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+## Tauri build
+
+Apple Silicon および x86 双方用のビルドコマンド
+
+```bash
+npm run tauri build -- --target universal-apple-darwin
+```
