@@ -1,12 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { get } from "svelte/store";
-  import { userData } from "$lib/stores/user";
-  import { calendarData } from "$lib/stores/calendar";
   import { getModalStore } from "@skeletonlabs/skeleton";
   import type { ModalSettings, ModalComponent } from "@skeletonlabs/skeleton";
-  import { currentYear, currentMonth, excludeDays } from "$lib/stores/calendar";
-  import { updateUserIds } from "$lib/stores/calendar";
+
+  import { userData } from "$lib/stores/user";
+  import { calendarData, currentYear, currentMonth, excludeDays, updateUserIds } from "$lib/stores/calendar";
   import ModalUserSelect from "$lib/components/modal/UserSelect.svelte";
 
   const initialDate: Date = new Date();
@@ -31,17 +29,11 @@
       days.push({
         day: day,
         userIds:
-          $calendarData &&
-          $calendarData.year === year &&
-          $calendarData.month === month &&
-          $calendarData.days[day.toString()]
+          $calendarData.year === year && $calendarData.month === month && $calendarData.days[day.toString()]
             ? $calendarData.days[day.toString()].userIds
             : [],
         stUserIds:
-          $calendarData &&
-          $calendarData.year === year &&
-          $calendarData.month === month &&
-          $calendarData.days[day.toString()]
+          $calendarData.year === year && $calendarData.month === month && $calendarData.days[day.toString()]
             ? $calendarData.days[day.toString()].stUserIds
             : [],
         isToday: isToday(day, correctedMonth, year),
@@ -55,21 +47,24 @@
   }
 
   function navigateMonth(step: number): void {
-    $currentMonth += step;
-    if ($currentMonth > 11) {
-      $currentMonth = 0;
-      $currentYear++;
-    } else if ($currentMonth < 0) {
-      $currentMonth = 11;
-      $currentYear--;
+    let newMonth = $currentMonth + step;
+    let newYear = $currentYear;
+
+    if (newMonth > 12) {
+      newMonth = 1;
+      newYear++;
+    } else if (newMonth < 1) {
+      newMonth = 12;
+      newYear--;
     }
-    generateCalendar($currentMonth, $currentYear);
+
+    currentYear.set(newYear);
+    currentMonth.set(newMonth);
   }
 
   function resetToToday(): void {
-    $currentMonth = initialDate.getMonth() + 1;
-    $currentYear = initialDate.getFullYear();
-    generateCalendar($currentMonth, $currentYear);
+    currentYear.set(initialDate.getFullYear());
+    currentMonth.set(initialDate.getMonth() + 1);
   }
 
   function getUserName(userId: number): string {
@@ -90,10 +85,7 @@
       component: MyModalComponent,
       backdropClasses: cModalBackdrop,
       response: (userId: number | undefined) => {
-        if (typeof userId === "number") {
-          if (getUserName(userId) === unknownName) {
-            return;
-          }
+        if (typeof userId === "number" && getUserName(userId) !== unknownName) {
           updateUserIds(Number(days[day].day), [...days[day].userIds, userId]);
         }
       },
@@ -102,12 +94,13 @@
   }
 
   function selectDate(day: number) {
-    const currentDates = get(excludeDays);
-    if (!currentDates.includes(day)) {
-      excludeDays.set([...currentDates, day]);
-    } else {
-      excludeDays.set(currentDates.filter((d) => d !== day));
-    }
+    excludeDays.update((currentDates) => {
+      if (!currentDates.includes(day)) {
+        return [...currentDates, day];
+      } else {
+        return currentDates.filter((d) => d !== day);
+      }
+    });
   }
 
   $: $calendarData, generateCalendar($currentMonth, $currentYear);
