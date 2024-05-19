@@ -65,8 +65,8 @@
     data.forEach((row, index) => {
       days[String(index + 1)] = {
         userIds: Object.entries(row)
-          .filter(([key, _]) => key.startsWith("Student"))
-          .map(([_, name]) => userMap.get(name.trim()))
+          .filter(([key]) => key.startsWith("Student"))
+          .map(([, name]) => userMap.get(name.trim()))
           .filter((id): id is number => id !== undefined),
         stUserIds: [],
       };

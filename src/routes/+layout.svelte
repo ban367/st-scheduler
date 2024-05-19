@@ -1,7 +1,7 @@
 <script lang="ts">
   import "../app.postcss";
   import { page } from "$app/stores";
-  import { AppRail, AppRailTile, AppRailAnchor } from "@skeletonlabs/skeleton";
+  import { AppRail, AppRailAnchor } from "@skeletonlabs/skeleton";
   import { Toast, Modal, initializeStores } from "@skeletonlabs/skeleton";
   import Icon from "@iconify/svelte";
 
