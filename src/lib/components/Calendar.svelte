@@ -64,6 +64,20 @@
     currentMonth.set(newMonth);
   }
 
+  function toggleStUserId(day: number, userId: number): void {
+    calendarData.update((data) => {
+      if (data.days[day]) {
+        const index = data.days[day].stUserIds.indexOf(userId);
+        if (index > -1) {
+          data.days[day].stUserIds.splice(index, 1);
+        } else {
+          data.days[day].stUserIds.push(userId);
+        }
+      }
+      return data;
+    });
+  }
+
   function getUserName(userId: number): string {
     const user = $userData.find((user) => user.id === userId);
     return user ? user.name : unknownName;
@@ -179,6 +193,7 @@
                   id="user-{userId}-{index}"
                   class="mr-1 h-4 w-4 cursor-pointer accent-emerald-300"
                   checked={dayInfo.stUserIds && dayInfo.stUserIds.includes(userId)}
+                  on:change={() => toggleStUserId(Number(dayInfo.day), userId)}
                 />
                 <label for="user-{userId}-{index}">{getUserName(userId)}</label>
               </div>
