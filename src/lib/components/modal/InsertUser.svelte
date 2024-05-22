@@ -150,7 +150,7 @@
                 <Icon icon="mdi:file-upload" height="26" />
               </div>
             </svelte:fragment>
-            <svelte:fragment slot="message">Upload a file or drag and drop</svelte:fragment>
+            <svelte:fragment slot="message">Upload a file</svelte:fragment>
             <svelte:fragment slot="meta">CSV allowed.</svelte:fragment>
           </FileDropzone>
         {/if}

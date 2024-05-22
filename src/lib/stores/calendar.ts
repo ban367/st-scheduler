@@ -28,6 +28,17 @@ export function updateUserIds(day: number, newUserIds: number[]) {
   });
 }
 
+export function resetUserSt() {
+  calendarData.update((data) => {
+    for (const day in data.days) {
+      if (Object.prototype.hasOwnProperty.call(data.days, day)) {
+        data.days[day].stUserIds = [];
+      }
+    }
+    return data;
+  });
+}
+
 function getDaysInMonth(year: number, month: number): number {
   return new Date(year, month, 0).getDate();
 }

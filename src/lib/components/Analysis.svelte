@@ -23,6 +23,22 @@
     updateUserListFromAggregate(response.userAggregate);
   }
 
+  async function analyzeCalendarDataSt() {
+    const response = (await invoke("analyze_calendar_data_with_st", {
+      data: $calendarData,
+      excludeUserIds: getSelectExcludeUserIds(),
+      excludeDates: $excludeDays,
+      availableSt: $available_st_count,
+    })) as AnalyzeData;
+
+    $calendarData = {
+      year: response.year,
+      month: response.month,
+      days: response.days,
+    };
+    updateUserListFromAggregate(response.userAggregate);
+  }
+
   function getSelectExcludeUserIds() {
     return $userData.filter((user) => user.isIgnore).map((user) => user.id);
   }
@@ -42,6 +58,7 @@
   }
 </script>
 
-<div class="">
+<div class="flex space-x-2">
   <button class={cButton} on:click={analyzeCalendarData}>解析</button>
+  <button class={cButton} on:click={analyzeCalendarDataSt}>現状解析</button>
 </div>

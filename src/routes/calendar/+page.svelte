@@ -4,7 +4,7 @@
   import Calendar from "$lib/components/Calendar.svelte";
   import Analysis from "$lib/components/Analysis.svelte";
   import { calendarDataToCSV } from "$lib/utils/convert";
-  import { calendarData } from "$lib/stores/calendar";
+  import { calendarData, resetUserSt } from "$lib/stores/calendar";
   import { userData } from "$lib/stores/user";
   import { cButton } from "$lib/utils/constant";
 
@@ -43,8 +43,9 @@
 </div>
 
 {#if $calendarData}
-  <div class="mb-5 mr-5 mt-2 flex justify-end">
-    <div class="mx-3">
+  <div class="mx-5 mb-5 mt-2 flex justify-end">
+    <div class="mr-10 space-x-2">
+      <button class={cButton} on:click={resetUserSt}>ST割当リセット</button>
       <button class={cButton} on:click={downloadCSV}>ダウンロード</button>
     </div>
     <div>
