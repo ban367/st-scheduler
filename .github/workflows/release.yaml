@@ -2,8 +2,8 @@ name: Create Build and Release
 
 on:
   push:
-    tags:
-      - "v*.*.*"
+    branches:
+      - release
 
 jobs:
   publish-tauri:
@@ -47,6 +47,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          tagName: v__VERSION__
           releaseName: "App v__VERSION__"
           releaseBody: "See the assets to download this version and install."
           releaseDraft: true
