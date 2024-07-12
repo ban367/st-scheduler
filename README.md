@@ -1,43 +1,36 @@
-# create-svelte
+# st-scheduler
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+<img src=".github/st-scheduler.gif" alt="Sample" />
 
-## Creating a project
+放課後デイサービスなどの専門的支援加算に該当する専門職(ST, OT等)を自動的に割り当てるスケジューラー。
 
-If you're seeing this, you've probably already done this step. Congrats!
+日付ごとに出席者を羅列したCSVデータを入力とし、以下の条件に合うように自動的にSTを割り当てます。  
+※現在(20240712)、国が定めている算定回数として定義。
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+- 12日以上出席で6日
+- 6日以上出席で4日
+- 1日以上出席で2日
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+入力データのサンプルはアプリ内よりダウンロードできます。  
+また、以下はアプリ内でカスタマイズ可能です。
+
+- 1日の合計の割当人数
+- 固定で割り当てる日付
+- 未割り当てとする日
+
+## Getting Started
+
+[リリースページ](https://github.com/ban367/st-scheduler/releases)より該当のOSのアプリをダウンロードできます。
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Start
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+npm run tauri dev
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
-## Tauri build
+### Build
 
 Apple Silicon および x86 双方用のビルドコマンド
 
